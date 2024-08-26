@@ -1,0 +1,44 @@
+version: '3'
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    environment:
+      MICROSERVICE_NAME: api-gateway
+    ports:
+      - "3000:3000" # Expose le port externe 3000
+    depends_on:
+      - chat-service
+      - chien-service
+    networks:
+      - microservices-network
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chat-service
+    environment:
+      MICROSERVICE_NAME: chat-service
+    expose:
+      - "3000"
+    networks:
+      - microservices-network
+
+  chien-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chien-service
+    environment:
+      MICROSERVICE_NAME: chien-service
+    expose:
+      - "3000"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
